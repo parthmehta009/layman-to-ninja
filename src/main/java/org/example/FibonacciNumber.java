@@ -1,11 +1,3 @@
-# layman-to-ninja
-List of coding problems
-
-## Practice Problems
-
-<details><summary>Fibonacci Numbers</summary>
-
-```
 package org.example;
 
 import java.util.Arrays;
@@ -44,6 +36,3 @@ public class FibonacciNumber {
     }
 
 }
-
-```
-</details>
