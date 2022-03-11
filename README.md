@@ -5,7 +5,7 @@ List of coding problems
 
 <details><summary>Fibonacci Numbers</summary>
 
-```
+```Java
 package org.example;
 
 import java.util.Arrays;
