@@ -47,3 +47,111 @@ public class FibonacciNumber {
 
 ```
 </details>
+
+<details><summary>Longest Common Subsequence</summary>
+
+##### Description
+
+> A subsequence of a string is a new string generated from the original string with some characters (can be none) deleted without changing the relative order of the remaining characters.
+> 
+> For example, `"ace"` is a subsequence of `"abcde"`.
+> 
+> A common subsequence of two strings is a subsequence that is common to both strings.
+>
+> **Example**<br>
+> **Input:** text1 = "abcde", text2 = "ace"
+> **Output:** 3  
+> **Explanation:** The longest common subsequence is "ace" and its length is 3.
+
+Source : [https://leetcode.com/problems/longest-common-subsequence/](https://leetcode.com/problems/longest-common-subsequence/)
+
+##### Recursive Tree
+
+[![](https://mermaid.ink/img/pako:eNp1VNFOwyAU_RWCD9OIZtC9rCYmk0t_QB8xBluqi21Zus7EOP9d2kLHsHYP2849l3s4B_qNc1NonOK3Vu3e0RPIBtlncynxhsORC5D4asQeLBZD1PECjFvoDAALvJwBdKCcADEwXqb_eaX2e9AlMp-6rdQOlduqSi_W67Jcr0luKtOmF8vl8m6ky8aJRjc398dOfWi02CyO6OEvzHuYOvEnPDd1bZqxzMOqxJfX9EriaTEeLAaWDX9h0cNuBgy4OXTIlOjVHJpiagEaTZh6fOFMGix6jnCGzSwrvA2cjkGFmTCXUxACi3MSNA5KsCioLAoKknFU0JIELf6QRLlwOlPoXePM7yCKDJgXHdkvqNc-5wid6ernCOb3F0UQFaIAjihzNswMy9CM9uEoJN6raFMi8ZbFKlwhY5HdIvlHFkO-Y06Z39RqDCuML7TTDl555pybrgire9UUaG-QaW7t8-yPmG2xxT714f4iToAAJYIAI8J-M5L5C33Xs06f8RIjhAmudVurbWFfSN89Yi_Bu661xKn9Waj2Q2LZ_FjeYVeoToti25kWp6Wq9ppgdejM41eTT8DIgq2yb7faoT-_UNVYiw)](https://mermaid.live/edit#pako:eNp1VNFOwyAU_RWCD9OIZtC9rCYmk0t_QB8xBluqi21Zus7EOP9d2kLHsHYP2849l3s4B_qNc1NonOK3Vu3e0RPIBtlncynxhsORC5D4asQeLBZD1PECjFvoDAALvJwBdKCcADEwXqb_eaX2e9AlMp-6rdQOlduqSi_W67Jcr0luKtOmF8vl8m6ky8aJRjc398dOfWi02CyO6OEvzHuYOvEnPDd1bZqxzMOqxJfX9EriaTEeLAaWDX9h0cNuBgy4OXTIlOjVHJpiagEaTZh6fOFMGix6jnCGzSwrvA2cjkGFmTCXUxACi3MSNA5KsCioLAoKknFU0JIELf6QRLlwOlPoXePM7yCKDJgXHdkvqNc-5wid6ernCOb3F0UQFaIAjihzNswMy9CM9uEoJN6raFMi8ZbFKlwhY5HdIvlHFkO-Y06Z39RqDCuML7TTDl555pybrgire9UUaG-QaW7t8-yPmG2xxT714f4iToAAJYIAI8J-M5L5C33Xs06f8RIjhAmudVurbWFfSN89Yi_Bu661xKn9Waj2Q2LZ_FjeYVeoToti25kWp6Wq9ppgdejM41eTT8DIgq2yb7faoT-_UNVYiw)
+
+##### Code
+
+```Java
+package org.example;
+
+import java.util.Arrays;
+
+public class LongestCommonSubsequence {
+
+    public static void main(String[] args) {
+
+        // input
+        char[] str1 = "ACD".toCharArray();
+        char[] str2 = "CED".toCharArray();
+
+        // recursive solution
+        System.out.println("Recursive solution: " + lcs_rec(0,0, str1, str2));
+
+        // Dynamic programming solution
+        int[][] dp_arr = new int[str1.length][str2.length];
+        Arrays.stream(dp_arr).forEach(a -> Arrays.fill(a, -1));
+        System.out.println("DP solution: " + lcs_memoization(0, 0, str1, str2, dp_arr));
+        Arrays.stream(dp_arr).forEach(a -> Arrays.fill(a, -1));
+        System.out.println("DP Top down: " + lcs_topdown(str1.length-1, str2.length-1, str1, str2, dp_arr));
+    }
+
+    private static int lcs_rec(int i, int j, char[] str1, char[] str2) {
+        // base case
+        if(i >= str1.length || j >= str2.length)
+            return 0;
+
+        // when both ith and jth char matches
+        if(str1[i] == str2[j])
+            return 1+lcs_rec(i+1, j+1, str1, str2);
+
+        // when ith and jth char does not match
+        int left = lcs_rec(i+1, j, str1, str2);
+        int right = lcs_rec(i, j+1, str1, str2);
+        return Math.max(left, right);
+    }
+
+    // This method solves problem in BottomUp approach as we go from 0..n
+    private static int lcs_memoization(int i, int j, char[] str1, char[] str2, int[][] dp) {
+        // base case
+        if(i >= str1.length || j >= str2.length)
+            return 0;
+
+        // if dp arr state has changed, use that value
+        if(dp[i][j] != -1)
+            return dp[i][j];
+
+        // when both ith and jth char matches
+        if(str1[i] == str2[j])
+            return dp[i][j] = 1 + lcs_memoization(i+1, j+1, str1, str2, dp);
+
+        // when ith and jth char does not match
+        int left = lcs_memoization(i+1, j, str1, str2, dp);
+        int right = lcs_memoization(i, j+1, str1, str2, dp);
+        return dp[i][j] = Math.max(left, right);
+    }
+
+    private static int lcs_topdown(int i, int j, char[] str1, char[] str2, int[][] dp) {
+        // base case
+        if(i < 0 || j < 0)
+            return 0;
+
+        // if dp arr state has changed, use that value
+        if(dp[i][j] != -1)
+            return dp[i][j];
+
+        // when both ith and jth char matches
+        if(str1[i] == str2[j])
+            return dp[i][j] = 1 + lcs_memoization(i-1, j-1, str1, str2, dp);
+
+        // when ith and jth char does not match
+        int left = lcs_memoization(i-1, j, str1, str2, dp);
+        int right = lcs_memoization(i, j-1, str1, str2, dp);
+        return dp[i][j] = Math.max(left, right);
+    }
+
+}
+```
+
+> **Recursive solution:** O(n.2^m), where m is the length of the first string and n is the length of the second string.<br>
+> **Dynamic Programming:** O(n*m)
+</details>
