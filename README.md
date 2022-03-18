@@ -246,13 +246,13 @@ Sort an array of 0's 1's & 2's</summary>
 > 
 > Output: [0,0,1,1,2,2]
 
-Leetcode link: [https://leetcode.com/problems/sort-colors/](hhttps://leetcode.com/problems/sort-colors/)
+Leetcode link: [https://leetcode.com/problems/sort-colors/](https://leetcode.com/problems/sort-colors/)
 
 ##### Solution
 
 Dutch National Flag Algorithm
 
-[![Color Sort Image - check in resource folder](https://share.sketchpad.app/22/07a-1ebb-1aea9d.png "Shiprock, New Mexico by Beau Rogers")]
+![Color Sort Image - check in resource folder](https://share.sketchpad.app/22/07a-1ebb-1aea9d.png "Color Sort Algo")
 
 ##### Code
 
