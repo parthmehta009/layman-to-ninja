@@ -15,7 +15,7 @@ public class FibonacciNumber {
         System.out.println(fib_memoization(n, dp_arr));
     }
 
-    public static int fib_recursive(int n) {
+    private static int fib_recursive(int n) {
         // base case
         if(n <= 1) return n;
 
@@ -23,7 +23,7 @@ public class FibonacciNumber {
         return fib_recursive(n-1) + fib_recursive(n-2);
     }
 
-    public static int fib_memoization(int n, int[] dp) {
+    private static int fib_memoization(int n, int[] dp) {
         // base case
         if(n <= 1) return n;
 
