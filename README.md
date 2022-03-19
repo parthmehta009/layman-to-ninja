@@ -559,3 +559,125 @@ Time Complexity: `O(5n)` as we iterate 5 times i.e `O(n)`
 ```
 
 </details>
+
+<details>
+<summary>Merge two sorted array in same two array</summary>
+
+##### Description
+
+> Given two sorted arrays, we need to merge them in O((n+m)*log(n+m)) time with O(1) extra space into a sorted array, when n is the size of the first array, and m is the size of the second array.
+> 
+> Exmple:
+> 
+> int[] arr1 = {34,35,36,37};
+> 
+> int[] arr2 = {3,4,5};
+> 
+> Output: 
+> 3 4 5 34
+> 
+> 35 36 37
+
+GFG problem link: [https://www.geeksforgeeks.org/efficiently-merging-two-sorted-arrays-with-o1-extra-space/](https://www.geeksforgeeks.org/efficiently-merging-two-sorted-arrays-with-o1-extra-space/)
+
+##### Solution
+
+Approach 1 : Selection sort on both array. As bot hare sorted compare element from first array with first element of second array and swap if required and sort second array after every swap to keep both array sorted all the time.
+
+Approach 2 : Shellsort - h-sorted array. Here we used h = n/2 and for odd n value we kept h = n/2 + n%2. Selection is extention of Insertion sort only if try to compare with h distance element instead of next element in arrya to reduce inversion pair in array. 
+
+##### Code
+
+```Java
+package org.example;
+
+public class MergeTwoArrWithConstantSpace {
+
+    public static void main(String[] args) {
+        int[] arr1 = {34,35,36,37};
+        int[] arr2 = {3,4,5};
+        sortTwoArrWithInsertionSort(arr1, arr2);
+        printArray(arr1, arr2);
+        int[] arr3 = {34,35,36,37};
+        int[] arr4 = {3,4,5};
+        sortTwoArrWithGapMethod_shellsort(arr3, arr4);
+        printArray(arr3, arr4);
+    }
+
+    private static void sortTwoArrWithGapMethod_shellsort(int[] arr1, int[] arr2) {
+        int n = arr1.length;
+        int m = arr2.length;
+
+        int h = (n+m)/2 + (n+m)%2;
+        int i, j;
+        while(h > 0) { // h-sort the array to swap long distance element
+
+            // compare ele in first arr
+            for(i = 0; i+h < n; i++) {
+                if(arr1[i] > arr1[i+h]) {
+                    int tmp = arr1[i];
+                    arr1[i] = arr1[i+h];
+                    arr1[i+h] = tmp;
+                }
+            }
+
+            // compare ele in second arr
+            for(j = h>n ? h-n : 0; i < n && j < m; i++,j++) {
+                if(arr1[i] > arr2[j]) {
+                    int tmp = arr1[i];
+                    arr1[i] = arr2[j];
+                    arr2[j] = tmp;
+                }
+            }
+
+            // if we haven't checked all second arr elements
+            if(j < m) {
+                for(j = 0; j+h < m; j++) {
+                    if(arr2[j] > arr2[j+h]) {
+                        int tmp = arr2[j];
+                        arr2[j] = arr2[j+h];
+                        arr2[j+h] = tmp;
+                    }
+                }
+            }
+            h = h == 1 ? 0 : h/2 + h%2; // return 0 for h == 1 else infinite loop
+        }
+    }
+
+    private static void sortTwoArrWithInsertionSort(int[] arr1, int[] arr2) {
+        int n = arr1.length;
+        int m = arr2.length;
+
+        // apply Insertion sort logic
+        for(int i = 0; i < n; i++) {
+            if(arr1[i] > arr2[0]) { // comparing only with first ele as both arrays are sorted
+                int tmp = arr1[i];
+                arr1[i] = arr2[0];
+                arr2[0] = tmp;
+            }
+
+            // sort second array if not sorted
+            for(int j=1; j < m && arr2[j] < arr2[j-1]; j++) {
+                int tmp = arr2[j];
+                arr2[j] = arr2[j-1];
+                arr2[j-1] = tmp;
+            }
+        }
+    }
+
+    private static void printArray(int[] arr1, int[] arr2) {
+        // print the sorted arr 1
+        for(int num: arr1) {
+            System.out.print(num + " ");
+        }
+        System.out.println();
+        // print the sorted arr 2
+        for(int num: arr2) {
+            System.out.print(num + " ");
+        }
+        System.out.println();
+    }
+}
+```
+
+</details>
