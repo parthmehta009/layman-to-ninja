@@ -347,3 +347,215 @@ public class SortColors {
 }
 ```
 </details>
+
+<details>
+<summary>
+Find the repeating and the missing number
+</summary>
+
+##### Description
+
+> Given an unsorted array of size n. Array elements are in the range from 1 to n. One number from set {1, 2, …n} is missing and one number occurs twice in the array. Find these two numbers.
+> 
+> Example :
+> 
+> Input: arr[] = {4, 3, 6, 2, 1, 1}
+> 
+> Output: Missing = 5, Repeating = 1
+
+GFG Problem link: [https://www.geeksforgeeks.org/find-a-repeating-and-a-missing-number/](https://www.geeksforgeeks.org/find-a-repeating-and-a-missing-number/)
+
+##### Solution
+
+Method 1 : Sorting
+
+Approach:
+Sort the input array. Traverse the array and check for missing and repeating.
+
+Time Complexity: `O(nLogn)`
+
+Note that after sorting, to find missing and repeating number in single pass is not that simple and intuitive. Do check for corner cases. Check the implementation and verify if that indeed find correct result.
+
+![Repeating and missing number algo - check resource folder](https://share.sketchpad.app/22/89a-49a9-d4d5c0.png "Repeating and MissingNumber_sort image")
+
+Code:
+
+Input: `int[] arr = {4, 3, 6, 2, 1, 1};`
+
+```Java
+    private static void printTwoNumberBySorting(int[] arr) {
+        System.out.println("Print by sorting");
+        Arrays.sort(arr);
+        for(int idx=1,arr_idx=0 ; arr_idx < arr.length;) {
+            if(arr[arr_idx] != idx) {
+                if(arr[arr_idx] < idx) {
+                    System.out.println("Repeating Number: " + arr[arr_idx]);
+                    arr_idx++;
+                } else {
+                    System.out.println("Missing Number: " + idx);
+                    idx++;
+                }
+            } else {
+                idx++;
+                arr_idx++;
+            }
+        }
+    }
+```
+
+Method 2: Print by Hash Frequency- counting
+
+Time Complexity: O(n)
+
+Auxiliary Space: O(n)
+
+```Java
+    private static void printTwoNumberByHashFrequency(int[] arr) {
+        System.out.println("Print by hash frequency");
+        int[] freq_arr = new int[arr.length+1];
+        Arrays.fill(freq_arr, 0);
+        for(int num: arr) {
+            freq_arr[num]++;
+        }
+        for(int i=1; i<freq_arr.length; i++) {
+            if(freq_arr[i] == 2)
+                System.out.println("Repeating Number: " + i);
+            if(freq_arr[i] == 0)
+                System.out.println("Missing Number: " + i);
+        }
+    }
+```
+
+Method 3: Solve by equation
+
+Approach:
+
+- Let `x` be the missing and `y` be the repeating element.
+- Get the sum of all numbers using formula `S = n(n+1)/2`
+- Get sum of all number squares `S^2 = n(n+1)(2n+1)/6`
+- The above two steps give us two equations, we can solve the equations and get the values of `x` and `y`.
+
+In actual `arr` sum `x` will not be there and `y` will be there twice.
+
+suppose give `arr` = `{2, 3, 3, 1, 4}` => 3 is repeating and 5 is missing 
+
+So, `x - y` = `S - arr_sum` ((1+2+3+4+5) - (2+3+3+1+4))
+`x - y` = 5 - 3 = 2
+
+`x^2 - y^2` = `S^2 - arr_square_sum` ((1^2+2^2+3^2+4^2+5^2) - (2^2+3^2+3^2+1^2+4^2))
+`(x+y)(x-y)` = 5^2 - 3^2 = 25 - 9 = 16
+
+we can replace `x-y` value in above equation
+
+`x+y` = 16/2 = 8
+
+now,
+
+`x-y` = 2
+
+`x+y` = 8
+
+`2x` = 10, `x` = 5, `y` = 3
+
+Time Complexity: `O(n)`
+
+Code
+
+```Java
+    private static void printTwoNumberByEquation(int[] arr) {
+        System.out.println("Print by equation");
+        int n = arr.length;
+        long sum = ((long) n *(n+1))/2;
+        long square_sum = (n*(n+1)*((2L *n)+1))/6;
+
+        long arr_sum = Arrays.stream(arr).sum();
+        long arr_square_sum = Arrays.stream(arr).map(num -> num * num).sum();
+
+        long x_min_y = sum - arr_sum;
+        long x_plus_y = (square_sum - arr_square_sum)/x_min_y;
+
+        long x = (x_plus_y + x_min_y)/2;
+        long y = x - x_min_y;
+        System.out.println("Repeating Number: " + y);
+        System.out.println("Missing Number: " + x);
+    }
+```
+
+Method 4 : Use XOR operation
+
+> XOR operation return `true` only if either condition is true, not both true and not both false. So, 1 and 0 gives 1 other is 0 and 1 gives 1
+>
+> Also note, number's XOR with self gives `0` as all bit cancel each other. `3^3 = 0`
+
+Approach:
+
+- Let x and y be the desired output elements.
+- Calculate XOR of all the array elements.
+
+`XOR = arr[0]^arr[1]^arr[2]…..arr[n-1]`
+
+- XOR the result with all numbers from 1 to n
+
+`XOR = XOR^1^2^…..^n`
+
+- In the result `XOR`, all elements would nullify each other except `x` and `y`. All the bits that are set in `XOR` will be set in either `x` or `y`. So if we take any set bit (We have chosen the rightmost set bit in code) of `XOR` and divide the elements of the array in two sets – one set of elements with same bit set and other set with same bit not set. By doing so, we will get `x` in one set and `y` in another set. Now if we do XOR of all the elements in first set, we will get `x`, and by doing same in other set we will get `y`.
+- We put array elements in 2 buckets based on set bit and then again put all elements from 1...n in 2 buckets. So, each bucket cancel all elements except `x` and `y`. As same number XOR cancel each other and gives 0
+
+First 2 XOR operation is just to find set bit position and we took right most set bit
+
+Time Complexity: `O(5n)` as we iterate 5 times i.e `O(n)`
+
+```Java
+    private static void printTwoNumberByXOR(int[] arr) {
+        System.out.println("Print by XOR");
+        int xor_all = 0;
+
+        // get XOR of all arr elements
+        for (int i : arr) {
+            xor_all ^= i;
+        }
+
+        // XOR the above with numbers from 1 to n
+        for(int i=1; i<=arr.length; i++) {
+            xor_all ^= i;
+        }
+
+        int set_bit_no = xor_all & -xor_all;
+        int x = 0;
+        int y = 0;
+
+        // now divide arr elements in two baskets based on set bit
+        for (int j : arr) {
+            if ((j & set_bit_no) != 0) {
+                x ^= j;
+            } else {
+                y ^= j;
+            }
+        }
+
+        for(int i=1; i<=arr.length; i++) {
+            if((i & set_bit_no) != 0) {
+                x ^= i;
+            } else {
+                y ^= i;
+            }
+        }
+
+        // to figure out which one is missing and which one is repeating
+        int x_count = 0;
+        for(int num: arr) {
+            if(num == x) {
+                x_count++;
+            }
+        }
+        if(x_count == 2) {
+            System.out.println("Repeating Number: " + x);
+            System.out.println("Missing Number: " + y);
+        } else {
+            System.out.println("Repeating Number: " + y);
+            System.out.println("Missing Number: " + x);
+        }
+    }
+```
+
+</details>
