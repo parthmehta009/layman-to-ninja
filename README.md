@@ -829,3 +829,162 @@ public class MergeIntervals {
 }
 ```
 </details>
+
+<details>
+<summary>Set Matrix Zeros</summary>
+
+##### Description
+
+> Given an `m x n` integer matrix `matrix`, if an element is `0`, set its entire row and column to `0`'s.
+>
+> Example:
+> 
+> Input: matrix = 
+> 
+> [[1,1,1],
+> 
+>  [1,0,1],
+> 
+>  [1,1,1]]
+> 
+> Output: 
+> 
+> [[1,0,1],
+> 
+> [0,0,0],
+> 
+> [1,0,1]]
+
+Leetcode problem link: [https://leetcode.com/problems/set-matrix-zeroes/](https://leetcode.com/problems/set-matrix-zeroes/)
+
+Explanation video: [https://www.youtube.com/watch?v=M65xBewcqcI&ab_channel=takeUforward](https://www.youtube.com/watch?v=M65xBewcqcI&ab_channel=takeUforward)
+
+##### Solution
+
+1) Brute-force approach:
+
+- traverse the matrix and check if any element is `0` - set entire row and column elements as -1.
+- do not change any other `0` to `-1` while marking row and column
+- iterate again and update all `-1` entry to `0`
+- we assume given input matrix contains only `+ve` values else instead of `-1` choose any other value which is not present in matrix
+
+![Set Matrix Zero - Brute force solution](src/main/resources/img/SetMatrixZero_bruteForce.png "Brute-force Solution")
+
+Time Complexity: `O(m*n) * O(m+n)`
+
+Space Complexity: O(1)
+
+2) Brute-force optimization approach(with extra space):
+
+ - to optimize further, we take 2 arrays of size rows and columns respectively. 
+ - approach will be similar to the solution 1, traverse the `matrix` and for every `0` entry in matrix update `row` and `column` array's respective entry with `-1`.
+ - here, we choose `-1` and not `0` as to avoid `row` and `column` array initialization with dummy values. As Java initialize both with `0`s.
+ - traverse matrix again and for every index check respective `row` and `column` array entry, if any of them contain value `-1`, set matrix value as `0`
+
+![Set Matrix Zero - Brute force optimal](src/main/resources/img/SetMatrixZero-bruteforce-optimal.png "Brute-force optimization solution")
+
+Time Complexity: `O(n*m) + O(n*m)` = `O(2*n*m)` = `O(n*m)`
+
+Space Complexity: `O(n) + O(m)` for taking 2 extra array
+
+3) Optimal Approach (take those extra space inside matrix 1st row,column):
+
+![Set Matrix Zero - Optimal](src/main/resources/img/SetMatrixZero_optimal.png "Optimal Solution")
+
+Time Complexity: `O(2*n*m)` as we traverse twice
+
+Space Complexity: `O(1)`
+
+##### Code
+
+```Java
+package org.example;
+
+import java.util.Arrays;
+
+public class SetMatrixZeroes {
+
+    public static void main(String[] args) {
+        int[][] arr_input1 = {
+                {1,1,1},
+                {1,0,1},
+                {1,1,1}
+        };
+        int[][] arr_input2 = Arrays.stream(arr_input1).map(int[]::clone).toArray(int[][]::new);
+        int[][] arr_input3 = Arrays.stream(arr_input1).map(int[]::clone).toArray(int[][]::new);
+        setZerosBruteforce(arr_input1);
+        printMatrix(arr_input1);
+        setZeroBruteforce_optimal(arr_input2);
+        printMatrix(arr_input2);
+        setZeros(arr_input3);
+        printMatrix(arr_input3);
+    }
+
+    private static void setZeros(int[][] matrix) {
+        boolean top_corner_flag = false;
+        for(int i=0; i<matrix.length; i++) {
+            if(matrix[i][0] == 0) top_corner_flag = true;
+            for(int j=1; j<matrix[i].length; j++)
+                if (matrix[i][j] == 0)
+                    matrix[i][0] = matrix[0][j] = 0;
+        }
+
+        // traverse in reverse order
+        for(int i=matrix.length-1; i>=0; i--) {
+            for (int j=matrix[i].length-1; j>=1; j--)
+                if(matrix[i][0] == 0 || matrix[0][j] == 0)
+                    matrix[i][j] = 0;
+            if(top_corner_flag) matrix[i][0] = 0;
+        }
+    }
+
+    private static void setZeroBruteforce_optimal(int[][] matrix) {
+        int[] row = new int[matrix.length];
+        int[] column = new int[matrix[0].length]; // atleast 1 row will be there as per given constraints
+
+        for(int i=0; i<matrix.length; i++) {
+            for(int j=0; j<matrix[i].length; j++) {
+                if(matrix[i][j] == 0) {
+                    row[i] = -1; column[j] = -1;
+                }
+            }
+        }
+
+        for(int i=0; i<matrix.length; i++) {
+            for(int j=0; j<matrix[i].length; j++) {
+                if(row[i] == -1 || column[j] == -1)
+                    matrix[i][j] = 0;
+            }
+        }
+    }
+
+    private static void setZerosBruteforce(int[][] matrix) {
+        for(int i=0; i< matrix.length; i++) {
+            for(int j=0; j<matrix[i].length; j++) {
+                if(matrix[i][j] == 0) {
+                    for(int row=0; row<matrix.length; row++) {
+                        if(matrix[row][j] != 0) matrix[row][j] = -1;
+                    }
+                    for(int col=0; col<matrix[i].length; col++) {
+                        if(matrix[i][col] != 0) matrix[i][col] = -1;
+                    }
+                }
+            }
+        }
+
+        for(int i=0; i<matrix.length; i++)
+            for(int j=0; j<matrix[i].length; j++)
+                if(matrix[i][j] == -1) matrix[i][j] = 0;
+    }
+
+    private static void printMatrix(int[][] arr) {
+        for(int[] a: arr) {
+            for(int num: a) {
+                System.out.print(num + " ");
+            }
+            System.out.println();
+        }
+    }
+}
+```
+</details>
