@@ -168,6 +168,8 @@ public class LongestCommonSubsequence {
 
 Leetcode link: [https://leetcode.com/problems/find-the-duplicate-number/](https://leetcode.com/problems/find-the-duplicate-number/)
 
+Exxplnation video: [https://www.youtube.com/watch?v=32Ll35mhWg0&ab_channel=takeUforward](https://www.youtube.com/watch?v=32Ll35mhWg0&ab_channel=takeUforward)
+
 ##### Code
 
 ```Java
@@ -247,6 +249,8 @@ Sort an array of 0's 1's & 2's</summary>
 > Output: [0,0,1,1,2,2]
 
 Leetcode link: [https://leetcode.com/problems/sort-colors/](https://leetcode.com/problems/sort-colors/)
+
+Explnation video: [https://www.youtube.com/watch?v=oaVa-9wmpns&t=412s&ab_channel=takeUforward](https://www.youtube.com/watch?v=oaVa-9wmpns&t=412s&ab_channel=takeUforward)
 
 ##### Solution
 
@@ -364,6 +368,8 @@ Find the repeating and the missing number
 > Output: Missing = 5, Repeating = 1
 
 GFG Problem link: [https://www.geeksforgeeks.org/find-a-repeating-and-a-missing-number/](https://www.geeksforgeeks.org/find-a-repeating-and-a-missing-number/)
+
+Explanation video: [https://www.youtube.com/watch?v=5nMGY4VUoRY&ab_channel=takeUforward](https://www.youtube.com/watch?v=5nMGY4VUoRY&ab_channel=takeUforward)
 
 ##### Solution
 
@@ -580,6 +586,8 @@ Time Complexity: `O(5n)` as we iterate 5 times i.e `O(n)`
 
 GFG problem link: [https://www.geeksforgeeks.org/efficiently-merging-two-sorted-arrays-with-o1-extra-space/](https://www.geeksforgeeks.org/efficiently-merging-two-sorted-arrays-with-o1-extra-space/)
 
+Explanation video: [https://www.youtube.com/watch?v=hVl2b3bLzBw&t=431s&ab_channel=takeUforward](https://www.youtube.com/watch?v=hVl2b3bLzBw&t=431s&ab_channel=takeUforward)
+
 ##### Solution
 
 Approach 1 : Selection sort on both array. As both are sorted; compare element from first array with first element of second array and swap if required and sort second array after every swap to keep both array sorted all the time.
@@ -702,6 +710,8 @@ Maximum Subarray Sum - Kadane's Algo
 
 Leetcode problem link: [https://leetcode.com/problems/maximum-subarray/](https://leetcode.com/problems/maximum-subarray/)
 
+Explanation video : [https://www.youtube.com/watch?v=w_KEocd__20&t=167s&ab_channel=takeUforward](https://www.youtube.com/watch?v=w_KEocd__20&t=167s&ab_channel=takeUforward)
+
 ##### Solution
 
 ![Kadane's Algorithm](src/main/resources/img/Kadanes-algo.jpeg "Kadane's Algorithm")
@@ -770,6 +780,8 @@ Example 2
 > Explanation: Intervals [1,4] and [4,5] are considered overlapping.
 
 Leetcode problem link: [https://leetcode.com/problems/merge-intervals/](https://leetcode.com/problems/merge-intervals/)
+
+Explanation video : [https://www.youtube.com/watch?v=2JzRBPFYbKE&ab_channel=takeUforward](https://www.youtube.com/watch?v=2JzRBPFYbKE&ab_channel=takeUforward)
 
 ##### Code
 
