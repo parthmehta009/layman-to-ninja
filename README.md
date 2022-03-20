@@ -746,3 +746,74 @@ public class MaximumSubArraySum {
 }
 ```
 </details>
+
+<details>
+<summary>Merge Overlapping Intervals</summary>
+
+##### Description
+> Given an array of `intervals` where `intervals[i] = [start, end]`, merge all overlapping intervals, and return an array of the non-overlapping intervals that cover all the intervals in the input.
+
+Example 1
+
+> Input: intervals = [[1,3],[2,6],[8,10],[15,18]]
+> 
+> Output: [[1,6],[8,10],[15,18]]
+> 
+> Explanation: Since intervals [1,3] and [2,6] overlaps, merge them into [1,6].
+
+Example 2
+
+> Input: intervals = [[1,4],[4,5]]
+> 
+> Output: [[1,5]]
+> 
+> Explanation: Intervals [1,4] and [4,5] are considered overlapping.
+
+Leetcode problem link: [https://leetcode.com/problems/merge-intervals/](https://leetcode.com/problems/merge-intervals/)
+
+##### Code
+
+```Java
+package org.example;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.List;
+
+public class MergeIntervals {
+
+    public static void main(String[] args) {
+        int[][] input = {{1,4}, {2,6}, {11,12}, {9,11}, {15,18}, {16,17}};
+        int[][] output = mergeInterval(input);
+        for(int[] arr : output) {
+            System.out.print("(" + arr[0] + "," + arr[1] + ") ");
+        }
+    }
+
+    private static int[][] mergeInterval(int[][] intervals) {
+        List<int[]> result = new ArrayList<>();
+
+        if(intervals == null || intervals.length == 0) {
+            return result.toArray(new int[0][]);
+        }
+
+        Arrays.sort(intervals, Comparator.comparingInt(a -> a[0]));
+        int start = intervals[0][0];
+        int end = intervals[0][1];
+
+        for(int[] arr: intervals) {
+            if(arr[0] <= end)
+                end = Math.max(end, arr[1]);
+            else {
+                result.add(new int[]{start, end});
+                start = arr[0];
+                end = arr[1];
+            }
+        }
+        result.add(new int[]{start, end}); // add the last merged pair
+        return result.toArray(new int[0][]);
+    }
+}
+```
+</details>
