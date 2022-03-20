@@ -582,9 +582,9 @@ GFG problem link: [https://www.geeksforgeeks.org/efficiently-merging-two-sorted-
 
 ##### Solution
 
-Approach 1 : Selection sort on both array. As bot hare sorted compare element from first array with first element of second array and swap if required and sort second array after every swap to keep both array sorted all the time.
+Approach 1 : Selection sort on both array. As both are sorted; compare element from first array with first element of second array and swap if required and sort second array after every swap to keep both array sorted all the time.
 
-Approach 2 : Shellsort - h-sorted array. Here we used h = n/2 and for odd n value we kept h = n/2 + n%2. Selection is extention of Insertion sort only if try to compare with h distance element instead of next element in arrya to reduce inversion pair in array. 
+Approach 2 : Shellsort - h-sorted array. Here we used h = n/2 and for odd n value we kept h = n/2 + n%2. Shellsort is extension of Insertion sort only, here we try to compare with h distance element instead of next element in array to reduce inversion pair in array. 
 
 ##### Code
 
@@ -679,5 +679,70 @@ public class MergeTwoArrWithConstantSpace {
     }
 }
 ```
+</details>
 
+<details>
+<summary>
+Maximum Subarray Sum - Kadane's Algo
+</summary>
+
+##### Description
+
+> Given an integer array `nums`, find the contiguous subarray (containing at least one number) which has the largest sum and return its sum.
+>
+> A subarray is a contiguous part of an array.
+> 
+> Exmaple
+> 
+> Input: nums = [-2,1,-3,4,-1,2,1,-5,4]
+> 
+> Output: 6
+> 
+> Explanation: [4,-1,2,1] has the largest sum = 6.
+
+Leetcode problem link: [https://leetcode.com/problems/maximum-subarray/](https://leetcode.com/problems/maximum-subarray/)
+
+##### Solution
+
+![Kadane's Algorithm](src/main/resources/img/Kadanes-algo.jpeg "Kadane's Algorithm")
+
+##### Code
+
+```Java
+package org.example;
+
+public class MaximumSubArraySum {
+
+    public static void main(String[] args) {
+        int[] arr = {-2,1,-3,4,-1,2,1,-5,4};
+        System.out.println("Maximum subarray sum, Kadane's method: " +
+                maxSubArraySum_Kadanes_algo(arr));
+        System.out.println("Brute force approach: " +
+                maxSubArraySum_bruteforce(arr));
+    }
+
+    private static int maxSubArraySum_Kadanes_algo(int[] arr) {
+        int sum = 0;
+        int max = arr[0];
+        for(int num: arr) {
+            sum += num;
+            if(sum > max) max = sum;
+            if(sum < 0) sum = 0;
+        }
+        return max;
+    }
+
+    private static int maxSubArraySum_bruteforce(int[] arr) {
+        int max = 0;
+        for(int i=0; i<arr.length; i++) {
+            int sum = 0;
+            for(int j=i; j<arr.length; j++) {
+                sum += arr[j];
+                max = Math.max(max, sum);
+            }
+        }
+        return max;
+    }
+}
+```
 </details>
