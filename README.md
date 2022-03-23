@@ -1036,3 +1036,195 @@ public class PascalTriangle {
 }
 ```
 </details>
+
+<details>
+<summary>Print All Permutation</summary>
+
+##### Description
+
+> Given input string or Input list or Input array - print all permutation of it.
+>
+> Example:
+> Input: "ABC"
+>
+> Output:
+> 
+> ABC
+ACB
+BAC
+BCA
+CAB
+CBA
+
+##### Explanation:
+
+Here is how we do it manually for input "DOG".
+- Let’s take the first letter of our string input it in our memory: `D`
+- Now, let’s take the remaining letters: `O`, `G`
+- Let’s make one word by taking the remaining letters, and then add them to our first letter, one by one: `D` + `OG`, and `D` + `GO`. So we now have 2 permutations: `DOG` and `DGO`.
+- Let’s move on to the second letter: `O`, and take the remaining letter and set them aside: `D` and `G`.
+- Let’s make another permutation of those: `O` + `DG` and `O` + `GD`. Now we have 4 permutations: `DOG`, `DGO`, `ODG`, `OGD`.
+- Now let’s tackle the last letter: `G`. And set aside the remaining letters: `D` and `O`.
+- Let’s make permutation of that: `G` + `DO` and `G` + `OD`. Now we have 6 permutations: `DOG`, `DGO`, `ODG`, `OGD`, `GDO`, `GOD`.
+- We’d now just have to return all these combinations in an array.
+
+Above explanation quoted from blog: [https://medium.com/swlh/step-by-step-guide-to-solving-string-permutation-using-recursion-in-javascript-a11d098d5b83](https://medium.com/swlh/step-by-step-guide-to-solving-string-permutation-using-recursion-in-javascript-a11d098d5b83)
+
+Let's implement same in Java for String input. As Strings are immutable in Java so any concat operation on String will generate new String. So, in case of Recursive call we can treat it as local parameter variable. Check below 2 implementation, #1 with String input and #2 with List<Integer>. In #2 we need create new object of `List<Integer>` for every recursive call.
+
+1) String implementation
+
+```Java
+permute_str("", "ABC");
+```
+
+```Java
+private static void permute_str(String prefix, String str) {
+    int n = str.length();
+    if(n == 0) System.out.println(prefix);
+    else {
+        for(int i=0; i<n; i++)
+            permute_str(prefix + str.charAt(i), str.substring(0, i) + str.substring(i + 1, n));
+    }
+}
+```
+
+2) List<Integer> as param (can be any list of object)
+
+```Java 
+permute_list(new ArrayList<>(), new ArrayList<>(Arrays.asList(1,2)));
+```
+
+```Java
+private static void permute_list(List<Integer> prefixList, List<Integer> list) {
+    int n = list.size();
+    if(n == 0) System.out.println(Arrays.toString(prefixList.toArray()));
+    else {
+        for(int i=0; i<n; i++) {
+            // create new lists for next iteration
+            List<Integer> newPrefList = new ArrayList<>(prefixList);
+            List<Integer> newList = new ArrayList<>(list);
+
+            newPrefList.add(newList.get(i));
+            newList.remove(i);
+
+            permute_list(newPrefList, newList);
+        }
+    }
+}
+```
+
+Above #2 is same as #1 implementation, we take one element common and call recursive method to fetch permutation of `n-1` elements. Note, we created new list for each recursive call. 
+
+This implementation are not the most efficient one in terms of time and space complexity but that is not our intention for above code. Above is to develop intuition about recursive call inside loop iteration.
+
+Also read below stackoverflow answer:
+
+> To use recursion effectively in design, you solve the problem by assuming you've already solved it. The mental springboard for the current problem is "if I could calculate the permutations of `n-1` characters, then I could calculate the permutations of `n` characters by choosing each one in turn and appending the permutations of the remaining `n-1` characters, which I'm pretending I already know how to do".
+> 
+> Then you need a way to do what's called "bottoming out" the recursion. Since each new sub-problem is smaller than the last, perhaps you'll eventually get to a sub-sub-problem that you REALLY know how to solve.
+> 
+> In this case, you already know all the permutations of ONE character - it's just the character. So you know how to solve it for `n=1` and for every number that's one more than a number you can solve it for, and you're done. This is very closely related to something called mathematical induction.
+
+Link to answer: [https://stackoverflow.com/a/7540364](https://stackoverflow.com/a/7540364)
+
+Above 2 implementation if we stare at the code for some time eventually it will be obvious. But if you google for 'print all permutation' implementation, most quoted solution is as below:
+
+```Java 
+permute(Arrays.asList(1,2), 0);
+```
+
+```Java
+private static void permute(List<Integer> list, int k) {
+    for(int i=k; i<list.size(); i++) {
+        Collections.swap(list, i, k);
+        permute(list, k+1);
+        Collections.swap(list, k, i);
+    }
+    if(k == list.size()-1) {
+        System.out.println(Arrays.toString(list.toArray()));
+    }
+}
+```
+
+Above code is doing same as the algorithm steps mentioned above, but it does that by swapping elements on the same list (we could use Array also).
+
+Another thing to note here, `swap()` call before permutation is to actually swap the given list element and `swap()` call after permutation call is to undo the above first `swap()` done before so that for next iteration - **for the same recursive call level** - we get back the input list as given on the initial invocation.
+
+##### Recursive call walkthrough with println statements
+
+    ============WE ARE IN RECURSION========= with k = 0======
+    ===========ITERATION=========== i = 0
+    
+        ============WE ARE IN RECURSION========= with k = 1======
+        ===========ITERATION=========== i = 1
+
+            ============WE ARE IN RECURSION========= with k = 2======
+            Out of the for loop...
+            ********Remove Call Stack=******** with k = 2***********
+
+        ============WE ARE BACK IN RECURSION========= with k = 1======
+        
+        Out of the for loop...
+        Printing Arr : ########## OUTPUT ###########
+        [1, 2] 
+        ********Remove Call Stack=******** with k = 1***********
+        
+    ============WE ARE BACK IN RECURSION========= with k = 0======
+    
+    ===========ITERATION=========== i = 1
+    BEFORE permute: swap i: 1, k: 0 - arr :[2, 1]
+        ============WE ARE IN RECURSION========= with k = 1======
+        ===========ITERATION=========== i = 1
+        
+            ============WE ARE IN RECURSION========= with k = 2======
+            Out of the for loop...
+            ********Remove Call Stack=******** with k = 2***********
+            
+        ============WE ARE BACK IN RECURSION========= with k = 1======
+
+        Out of the for loop...
+        Printing Arr : ########## OUTPUT ###########
+        [2, 1]
+        ********Remove Call Stack=******** with k = 1***********
+
+    ============WE ARE BACK IN RECURSION========= with k = 0======
+    AFTER permute: swap i: 1, k: 0 - arr :[1, 2]
+    Out of the for loop...
+    ********Remove Call Stack=******** with k = 0***********
+
+Above walk-through is for input `[1,2]`. Note how we are swapping elements before generating output and later swap it back before next iteration, which you can see at last line, code reverts `[2,1]` to `[1,2]`. That can be observed, and it will more obvious if you run code with input `[1,2,3]`.
+
+Recursion is something that computers can do but Human can not and that's why it is very difficult to wrap our head around some code like above. At least I could not. We can prove it works, and we can debug and check that it works but when writing any new solution for any problem it is not very intuitive to come up with recursive solution.
+
+Code with above println statements:
+
+```Java 
+permute(Arrays.asList(1,2), 0);
+```
+
+```Java
+private static void permute(List<Integer> list, int k) {
+    System.out.println("============WE ARE IN RECURSION========= with k = " + k + "======");
+    for(int i=k; i<list.size(); i++) {
+        System.out.println("===========ITERATION=========== i = " + i);
+        Collections.swap(list, i, k);
+        System.out.println(i != k ?
+                "BEFORE permute: swap i: " + i + ", k: " + k + " - arr :" + Arrays.toString(list.toArray())
+                : "");
+        permute(list, k+1);
+        System.out.println("============WE ARE BACK IN RECURSION========= with k = " + k + "======");
+        Collections.swap(list, k, i);
+        System.out.println(i != k ?
+                "AFTER permute: swap i: " + i + ", k: " + k + " - arr :" + Arrays.toString(list.toArray())
+                : "");
+    }
+    System.out.println(" Out of the for loop...");
+    if(k == list.size()-1) {
+        System.out.println(" Printing Arr : ");
+        System.out.println(Arrays.toString(list.toArray()));
+    }
+    System.out.println("********Remove Call Stack=******** with k = " + k+"***********\n");
+}
+```
+</details>
