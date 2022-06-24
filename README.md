@@ -1228,3 +1228,81 @@ private static void permute(List<Integer> list, int k) {
 }
 ```
 </details>
+
+<details>
+<summary>Next Permutation</summary>
+
+##### Description
+
+> A **permutation** of an array of integers is an arrangement of its members into a sequence or linear order.
+> 
+> For `arr = [1, 2, 3]`, the following are considered permutations of `arr: [1,2,3], [1,3,2], [3,1,2], [2,3,1]`.
+> 
+> The **next permutation** of an array of integers is the next lexicographically greater permutation of its integer. More formally, if all the permutations of the array are sorted in one container according to their lexicographical order, then the next permutation of that array is the permutation that follows it in the sorted container
+> 
+> Given an array of integers `nums`, find the next _permutation_ of `nums`.
+> 
+> **Example 1**:
+> 
+> Input: nums = [1,2,3]
+> 
+> Output: [1,3,2]
+> 
+> **Example 2**:
+> 
+> Input: nums = [3,2,1]
+> 
+> Output: [1,2,3]
+> 
+> **Example 3**:
+> 
+> Input: nums = [1,1,5]
+> 
+> Output: [1,5,1]
+
+Leetcode problem link: [https://leetcode.com/problems/next-permutation/](https://leetcode.com/problems/next-permutation/)
+
+Explanation Video: [https://youtu.be/LuLCLgMElus](https://youtu.be/LuLCLgMElus)
+
+##### Solution
+
+![Next Permutation](src/main/resources/img/next-permutation.jpeg "Next Permutation")
+
+##### Code
+
+```Java
+public class NextPermutation {
+
+    public static void main(String[] args) {
+        int[] arr = {1, 3, 5, 4, 2};
+        System.out.println("Next permutation: ");
+        nextPermute(arr);
+        for(int a: arr) {
+            System.out.print(a + " ");
+        }
+    }
+
+    private static void nextPermute(int[] arr) {
+        if(arr == null || arr.length <= 1) return;
+        int i = arr.length-2;
+        while (i >= 0 && arr[i] >= arr[i+1]) i--;
+        if(i >= 0) {
+            int j = arr.length - 1;
+            while (arr[j] <= arr[i]) j--;
+            swap(arr, i , j);
+        }
+        reverse(arr, i+1, arr.length-1);
+    }
+
+    private static void swap(int[] arr, int i, int j) {
+        int tmp = arr[i];
+        arr[i] = arr[j];
+        arr[j] = tmp;
+    }
+
+    private static void reverse(int[] arr, int i, int j) {
+        while(i < j) swap(arr, i++, j--);
+    }
+}
+```
+</details>
